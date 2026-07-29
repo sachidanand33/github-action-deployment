@@ -1,6 +1,10 @@
-name: Terraform Deploy using OIDC
+name: Terraform Deployment
 
 on:
+  pull_request:
+    branches:
+      - main
+
   push:
     branches:
       - main
@@ -17,25 +21,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Print OIDC Subject
+      - name: Show OIDC Claims
         uses: actions/github-script@v7
         with:
           script: |
-            const core = require('@actions/core');
-            const token = await core.getIDToken("sts.amazonaws.com");
+            const id_token = await core.getIDToken("sts.amazonaws.com");
             const payload = JSON.parse(
-              Buffer.from(token.split('.')[1], 'base64').toString()
+              Buffer.from(id_token.split('.')[1], 'base64').toString()
             );
-            console.log("SUB =", payload.sub);
+            console.log(JSON.stringify(payload, null, 2));
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::596055752724:role/terraform-OIDC-connect-role
-          aws-region: ap-south-1
-
-      - name: Verify Identity
-        run: aws sts get-caller-identity
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.ROLE_NAME }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -43,11 +43,20 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      # PR Checks Only
+      - name: Terraform Format Check
+        if: github.event_name == 'pull_request'
+        run: terraform fmt -check -recursive
+
       - name: Terraform Validate
+        if: github.event_name == 'pull_request'
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color
 
+      # Apply Only After Merge to Main
       - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
