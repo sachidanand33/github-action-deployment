@@ -1,4 +1,4 @@
-resource "aws_instance" "web" {
+resource "aws_instance" "web-instance" {
 
   ami           = "ami-00d2dbb426772b03a"
 
