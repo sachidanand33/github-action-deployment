@@ -8,7 +8,14 @@ on:
   push:
     branches:
       - main
-
+ workflow_dispatch:
+    inputs:
+      action:
+        description: "Terraform Action"
+        required: true
+        type: choice
+        options:
+          - destroy
 permissions:
   id-token: write
   contents: read
@@ -60,3 +67,8 @@ jobs:
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
+
+      # Manual Destroy
+      - name: Terraform Destroy
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
+        run: terraform destroy -auto-approve
