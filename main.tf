@@ -5,6 +5,6 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
 
   tags = {
-    Name = "Terraform-OIDC-EC2_02"
+    Name = "Terraform-OIDC-EC2_03"
   }
 }
