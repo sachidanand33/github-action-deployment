@@ -14,7 +14,7 @@ resource "aws_s3_bucket" "fist_bucket" {
   bucket = "aws-terraform-596055752724"
 
   tags = {
-    Name        = "My bucket"
+    Name        = "My bucket-01"
     Environment = "Dev"
   }
 }
