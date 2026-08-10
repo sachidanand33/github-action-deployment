@@ -8,3 +8,13 @@ resource "aws_instance" "web" {
     Name = "Terraform-OIDC-EC2_04"
   }
 }
+
+# create s3 bucket
+resource "aws_s3_bucket" "fist_bucket" {
+  bucket = "aws-terraform-596055752724"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
