@@ -1,6 +1,6 @@
 resource "aws_instance" "web" {
 
-  ami           = "ami-00d2dbb426772b03a"
+  ami = "ami-00d2dbb426772b03a"
 
   instance_type = "t2.micro"
 
@@ -14,7 +14,7 @@ resource "aws_s3_bucket" "fist_bucket" {
   bucket = "aws-terraform-596055752724"
 
   tags = {
-    Name        = "My bucket-01"
+    Name        = "My bucket"
     Environment = "Dev"
   }
 }
