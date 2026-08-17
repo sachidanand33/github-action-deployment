@@ -9,7 +9,7 @@ variable "aws_region" {
 variable "instance_count" {
   description = "Number of EC2 instances to create"
   type        = number
-  default     = 4
+  default     = 2
 }
 
 # s3 count
