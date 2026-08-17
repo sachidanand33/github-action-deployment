@@ -22,10 +22,35 @@ output "nginx_urls" {
   ]
 }
 
+output "ec2_file_path" {
+  description = "File created on each EC2 instance"
+  value = [
+    for instance in aws_instance.web :
+    "/home/ec2-user/terraform-file.txt"
+  ]
+}
+
 # multiple s3 output
 output "s3_bucket_names" {
   value = {
     for key, bucket in aws_s3_bucket.buckets :
     key => bucket.bucket
+  }
+}
+
+
+output "s3_file_names" {
+  description = "File created in each S3 bucket"
+  value = {
+    for key, object in aws_s3_object.bucket_file :
+    key => object.key
+  }
+}
+
+output "s3_file_locations" {
+  description = "S3 locations of the Terraform files"
+  value = {
+    for key, object in aws_s3_object.bucket_file :
+    key => "s3://${object.bucket}/${object.key}"
   }
 }

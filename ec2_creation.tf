@@ -65,6 +65,12 @@ resource "aws_instance" "web" {
   user_data = <<-EOF
               #!/bin/bash
 
+              # Create a file on each EC2 instance
+              echo "This file was created by Terraform on EC2-${count.index + 1}" > /home/ec2-user/terraform-file.txt
+
+              # Set ownership
+              chown ec2-user:ec2-user /home/ec2-user/terraform-file.txt
+              
               # Update packages
               dnf update -y
 
