@@ -12,6 +12,12 @@ variable "instance_count" {
   default     = 2
 }
 
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+
 # s3 count
 variable "s3_buckets" {
   description = "S3 buckets to create"

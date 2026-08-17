@@ -41,13 +41,14 @@ resource "aws_s3_object" "bucket_file" {
 
   key = "terraform-file.txt"
 
-  content = templatefile("${path.module}/templates/s3-file.txt.tftpl", {
-    bucket_name = each.value
-    bucket_type = each.key
-    environment = "non-prod"
-    managed_by  = "Terraform"
-    aws_region  = var.aws_region
-  })
+  content = <<-EOT
+    Bucket Name: ${each.value}
+    Bucket Type: ${each.key}
+    Environment: non-prod
+    Managed By: Terraform
+    AWS Region: ${var.aws_region}
+    Created By: Terraform
+  EOT
 
   tags = {
     Environment = "non-prod"

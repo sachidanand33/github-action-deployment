@@ -72,7 +72,7 @@ Environment: prod
 Application: Nginx
 Managed By: Terraform
 AWS Region: ${var.aws_region}
-Instance Type: ${self.instance_type}
+Instance Type: ${instance_type}
 EOT
 
               # Set ownership
