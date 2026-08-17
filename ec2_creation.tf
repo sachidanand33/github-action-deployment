@@ -65,12 +65,22 @@ resource "aws_instance" "web" {
   user_data = <<-EOF
               #!/bin/bash
 
-              # Create a file on each EC2 instance
-              echo "This file was created by Terraform on EC2-${count.index + 1}" > /home/ec2-user/terraform-file.txt
+              # Create a file with required data
+            cat > /home/ec2-user/terraform-file.txt <<EOT
+Server Name: Terraform-OIDC-EC2-${count.index + 1}
+Environment: prod
+Application: Nginx
+Managed By: Terraform
+AWS Region: ${var.aws_region}
+Instance Type: ${self.instance_type}
+EOT
 
               # Set ownership
               chown ec2-user:ec2-user /home/ec2-user/terraform-file.txt
 
+              # Set permissions
+              chmod 644 /home/ec2-user/terraform-file.txt
+              
               # Update packages
               dnf update -y
 

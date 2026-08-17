@@ -32,14 +32,22 @@ resource "aws_s3_bucket" "buckets" {
   }
 }
 
-# Create file in each S3 buckets
+# Create file in each S3 bucket
 resource "aws_s3_object" "bucket_file" {
-  for_each = var.s3_buckets
+
+  for_each = local.buckets
 
   bucket = aws_s3_bucket.buckets[each.key].id
-  key    = "terraform-file.txt"
 
-  content = "This file was created by Terraform in the ${each.key} S3 bucket."
+  key = "terraform-file.txt"
+
+  content = templatefile("${path.module}/templates/s3-file.txt.tftpl", {
+    bucket_name = each.value
+    bucket_type = each.key
+    environment = "non-prod"
+    managed_by  = "Terraform"
+    aws_region  = var.aws_region
+  })
 
   tags = {
     Environment = "non-prod"
