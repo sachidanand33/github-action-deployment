@@ -31,3 +31,18 @@ resource "aws_s3_bucket" "buckets" {
     Environment = "non-prod"
   }
 }
+
+# Create file in each S3 buckets
+resource "aws_s3_object" "bucket_file" {
+  for_each = var.s3_buckets
+
+  bucket = aws_s3_bucket.buckets[each.key].id
+  key    = "terraform-file.txt"
+
+  content = "This file was created by Terraform in the ${each.key} S3 bucket."
+
+  tags = {
+    Environment = "non-prod"
+    ManagedBy   = "Terraform"
+  }
+}
