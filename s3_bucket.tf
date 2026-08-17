@@ -1,5 +1,5 @@
 
-# S3 bucket names
+# multiple S3 bucket names
 locals {
   buckets = {
     logs    = "terraform-logs"
