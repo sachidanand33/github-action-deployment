@@ -2,7 +2,7 @@
 variable "aws_region" {
   description = "AWS region where resources will be created"
   type        = string
-  default     = "ap-south-1"
+  default     = "us-east-1"
 }
 
 # instance count
