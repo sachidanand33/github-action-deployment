@@ -40,7 +40,7 @@ resource "aws_security_group" "web_sg" {
 
   tags = {
     Name        = "Terraform-Nginx-SG"
-    Environment = "non-prod"
+    Environment = "prod"
   }
 }
 
@@ -70,7 +70,7 @@ resource "aws_instance" "web" {
 
               # Set ownership
               chown ec2-user:ec2-user /home/ec2-user/terraform-file.txt
-              
+
               # Update packages
               dnf update -y
 
