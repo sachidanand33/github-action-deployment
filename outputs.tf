@@ -1,15 +1,27 @@
 # multiple ec2 output
 output "instance_ids" {
-  value = aws_instance.web[*].id
+  description = "IDs of all EC2 instances"
+  value       = aws_instance.web[*].id
 }
 
 output "public_ips" {
-  value = aws_instance.web[*].public_ip
+  description = "Public IP addresses of all EC2 instances"
+  value       = aws_instance.web[*].public_ip
 }
 
 output "instance_names" {
-  value = aws_instance.web[*].tags["Name"]
+  description = "Names of all EC2 instances"
+  value       = aws_instance.web[*].tags["Name"]
 }
+
+output "nginx_urls" {
+  description = "Nginx URLs for all EC2 instances"
+  value = [
+    for instance in aws_instance.web :
+    "http://${instance.public_ip}"
+  ]
+}
+
 # multiple s3 output
 output "s3_bucket_names" {
   value = {
