@@ -50,7 +50,7 @@ resource "aws_security_group" "web_sg" {
 # ---------------------------------------------------------
 
 resource "aws_instance" "web" {
-  count = 2
+  count = 1
 
   ami           = "ami-00d2dbb426772b03a"
   instance_type = "t2.micro"
