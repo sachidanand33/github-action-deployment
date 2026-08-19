@@ -1,10 +1,18 @@
-# multiple ec2 output
+# ---------------------------------------------------------
+# Multiple EC2 Outputs
+# ---------------------------------------------------------
 output "instance_ids" {
   description = "IDs of all EC2 instances"
   value       = aws_instance.web[*].id
 }
 
-output "public_ips" {
+output "instance_private_ips" {
+  description = "Private IP addresses of all EC2 instances"
+  value       = aws_instance.web[*].private_ip
+}
+
+
+output "instance_public_ips" {
   description = "Public IP addresses of all EC2 instances"
   value       = aws_instance.web[*].public_ip
 }
@@ -53,4 +61,43 @@ output "s3_file_locations" {
     for key, object in aws_s3_object.bucket_file :
     key => "s3://${object.bucket}/${object.key}"
   }
+}
+
+# ---------------------------------------------------------
+# VPC Outputs
+# ---------------------------------------------------------
+
+output "vpc_id" {
+  description = "ID of the Terraform VPC"
+  value       = aws_vpc.main.id
+}
+
+output "vpc_cidr" {
+  description = "CIDR block of the Terraform VPC"
+  value       = aws_vpc.main.cidr_block
+}
+
+
+# ---------------------------------------------------------
+# Subnet Outputs
+# ---------------------------------------------------------
+
+output "public_subnet_id" {
+  description = "ID of the public subnet"
+  value       = aws_subnet.public.id
+}
+
+output "public_subnet_cidr" {
+  description = "CIDR block of the public subnet"
+  value       = aws_subnet.public.cidr_block
+}
+
+
+# ---------------------------------------------------------
+# Security Group Output
+# ---------------------------------------------------------
+
+output "security_group_id" {
+  description = "Security Group ID"
+  value       = aws_security_group.web_sg.id
 }

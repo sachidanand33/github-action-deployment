@@ -1,25 +1,24 @@
 # ---------------------------------------------------------
 # Security Group
-# Allows SSH (22) and HTTP (80) access to all EC2 instances
 # ---------------------------------------------------------
 
 resource "aws_security_group" "web_sg" {
   name        = "terraform-nginx-web-sg"
   description = "Security group for Terraform Nginx EC2 instances"
+  vpc_id      = aws_vpc.main.id
 
-  # SSH access
+  # SSH
   ingress {
     description = "SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
 
-    # For testing only.
-    # In production, replace this with your public IP/32.
+    # For testing only
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # HTTP access for Nginx
+  # HTTP
   ingress {
     description = "HTTP"
     from_port   = 80
@@ -29,7 +28,7 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow all outbound traffic
+  # Outbound
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
@@ -41,13 +40,13 @@ resource "aws_security_group" "web_sg" {
   tags = {
     Name        = "Terraform-Nginx-SG"
     Environment = "prod"
+    ManagedBy   = "Terraform"
   }
 }
 
 
 # ---------------------------------------------------------
 # EC2 Instances
-# Creates 2 EC2 instances
 # ---------------------------------------------------------
 
 resource "aws_instance" "web" {
@@ -56,44 +55,50 @@ resource "aws_instance" "web" {
   ami           = "ami-00d2dbb426772b03a"
   instance_type = "t2.micro"
 
-  # Attach the same security group to all 2 instances
+  # Launch all EC2 instances inside our VPC subnet
+  subnet_id = aws_subnet.public.id
+
+  # Attach security group
   vpc_security_group_ids = [
     aws_security_group.web_sg.id
   ]
 
-  # Install and start Nginx automatically
+  # Automatically assign public IP
+  associate_public_ip_address = true
+
+  # Install Nginx and create file
   user_data = <<-EOF
               #!/bin/bash
 
-              # Create a file with required data
-            cat > /home/ec2-user/terraform-file.txt <<EOT
-Server Name: Terraform-OIDC-EC2-${count.index + 1}
-Environment: prod
-Application: Nginx
-Managed By: Terraform
-AWS Region: ${var.aws_region}
-Instance Type: ${var.instance_type}
-EOT
+              # Create Terraform file
+              cat > /home/ec2-user/terraform-file.txt <<EOT
+              Server Name: Terraform-OIDC-EC2-${count.index + 1}
+              Environment: prod
+              Application: Nginx
+              Managed By: Terraform
+              AWS Region: ${var.aws_region}
+              Instance Type: t2.micro
+              EOT
 
               # Set ownership
               chown ec2-user:ec2-user /home/ec2-user/terraform-file.txt
 
               # Set permissions
               chmod 644 /home/ec2-user/terraform-file.txt
-              
+
               # Update packages
               dnf update -y
 
               # Install Nginx
               dnf install -y nginx
 
-              # Start Nginx automatically at boot
+              # Enable Nginx
               systemctl enable nginx
 
               # Start Nginx
               systemctl start nginx
 
-              # Create a simple web page
+              # Create web page
               echo "<h1>Hello from Terraform EC2-${count.index + 1}</h1>" > /usr/share/nginx/html/index.html
 
               # Restart Nginx
@@ -104,5 +109,6 @@ EOT
     Name        = "Terraform-OIDC-EC2-${count.index + 1}"
     Environment = "prod"
     Application = "Nginx"
+    ManagedBy   = "Terraform"
   }
 }
