@@ -73,7 +73,7 @@ resource "aws_instance" "web" {
               # Create Terraform file
               cat > /home/ec2-user/terraform-file.txt <<EOT
               Server Name: Terraform-OIDC-EC2-${count.index + 1}
-              Environment: prod
+              Environment: non-prod
               Application: Nginx
               Managed By: Terraform
               AWS Region: ${var.aws_region}
