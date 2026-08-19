@@ -107,7 +107,7 @@ resource "aws_instance" "web" {
 
   tags = {
     Name        = "Terraform-OIDC-EC2-${count.index + 1}"
-    Environment = "prod"
+    Environment = "non-prod"
     Application = "Nginx"
     ManagedBy   = "Terraform"
   }
