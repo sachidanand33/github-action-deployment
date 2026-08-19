@@ -84,7 +84,7 @@ resource "aws_instance" "web" {
               chown ec2-user:ec2-user /home/ec2-user/terraform-file.txt
 
               # Set permissions
-              chmod 644 /home/ec2-user/terraform-file.txt
+              chmod 600 /home/ec2-user/terraform-file.txt
 
               # Update packages
               dnf update -y
