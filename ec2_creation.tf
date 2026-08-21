@@ -52,8 +52,8 @@ resource "aws_security_group" "web_sg" {
 resource "aws_instance" "web" {
   count = 2
 
-  ami           = "ami-0332d564d76dbd8d6"
-  instance_type = "t2.micro"
+  ami           = "ami-0ac7b260cf76d8865"
+  instance_type = "t3.micro"
 
   # Launch all EC2 instances inside our VPC subnet
   subnet_id = aws_subnet.public.id
