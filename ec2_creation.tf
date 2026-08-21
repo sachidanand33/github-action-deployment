@@ -77,7 +77,7 @@ resource "aws_instance" "web" {
               Application: Nginx
               Managed By: Terraform
               AWS Region: ${var.aws_region}
-              Instance Type: t2.micro
+              Instance Type: t3.micro
               EOT
 
               # Set ownership
