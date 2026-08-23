@@ -6,8 +6,8 @@ variable "aws_region" {
 }
 
 # instance count
-variable "instance_count" {
-  description = "Number of EC2 instances to create"
+variable "ec2_count" {
+  description = "Number of EC2 web servers"
   type        = number
   default     = 2
 }
@@ -15,7 +15,13 @@ variable "instance_count" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
+}
+
+variable "ec2_ami" {
+  description = "AMI ID for EC2 instances"
+  type        = string
+  default     = "ami-0ac7b260cf76d8865"
 }
 
 # s3 count
