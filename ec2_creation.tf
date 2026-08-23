@@ -55,15 +55,15 @@ resource "aws_instance" "web" {
   # Launch EC2 instances in the VPC
   subnet_id = aws_subnet.public_a.id
 
- # Attach security group
+  # Attach security group
   vpc_security_group_ids = [
     aws_security_group.web_sg.id
   ]
 
- # Automatically assign public IP
+  # Automatically assign public IP
   associate_public_ip_address = true
 
- # Install Nginx and create file
+  # Install Nginx and create file
   user_data = <<-EOF
               #!/bin/bash
 
