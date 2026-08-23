@@ -90,14 +90,20 @@ output "vpc_cidr" {
 # Subnet Outputs
 # ---------------------------------------------------------
 
-output "public_subnet_id" {
-  description = "ID of the public subnet"
-  value       = aws_subnet.public.id
+output "public_subnet_ids" {
+  description = "IDs of the public subnets"
+  value = [
+    aws_subnet.public_a.id,
+    aws_subnet.public_b.id
+  ]
 }
 
-output "public_subnet_cidr" {
-  description = "CIDR block of the public subnet"
-  value       = aws_subnet.public.cidr_block
+output "public_subnet_cidrs" {
+  description = "CIDR blocks of the public subnets"
+  value = [
+    aws_subnet.public_a.cidr_block,
+    aws_subnet.public_b.cidr_block
+  ]
 }
 
 
