@@ -47,12 +47,16 @@ resource "aws_security_group" "web_sg" {
 # ---------------------------------------------------------
 
 resource "aws_instance" "web" {
-  count = var.ec2_count
+  count = var.ec2_instance_count
 
-  ami           = var.ec2_ami
+  ami           = var.ami_id
   instance_type = var.instance_type
 
+  # ---------------------------------------------------------
   # Launch EC2 instances in the both subnets
+  # EC2-1 -> public_a -> ap-south-1a
+  # EC2-2 -> public_b -> ap-south-1b
+  # ---------------------------------------------------------
   subnet_id = [
     aws_subnet.public_a.id,
     aws_subnet.public_b.id
@@ -99,14 +103,14 @@ resource "aws_instance" "web" {
               systemctl start nginx
               
               # Create web page
-              echo "<h1>Hello from Terraform EC2-${count.index + 1}</h1>" > /usr/share/nginx/html/index.html
+              echo "<h1>Hello from Terraform nginx EC2-${count.index + 1}</h1>" > /usr/share/nginx/html/index.html
               
               # Restart Nginx
               systemctl restart nginx
               EOF
 
   tags = {
-    Name        = "Terraform-OIDC-EC2-${count.index + 1}"
+    Name        = "Terraform-OIDC-nginx-EC2-${count.index + 1}"
     Environment = "prod"
     Application = "Nginx"
     ManagedBy   = "Terraform"

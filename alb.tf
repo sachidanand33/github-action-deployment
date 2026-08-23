@@ -97,7 +97,7 @@ resource "aws_lb_target_group" "web_tg" {
 # ---------------------------------------------------------
 
 resource "aws_lb_target_group_attachment" "web" {
-  count = var.ec2_count
+  count = length(aws_instance.web)
 
   target_group_arn = aws_lb_target_group.web_tg.arn
   target_id        = aws_instance.web[count.index].id
