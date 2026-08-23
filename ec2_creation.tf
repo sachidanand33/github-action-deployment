@@ -52,8 +52,11 @@ resource "aws_instance" "web" {
   ami           = var.ec2_ami
   instance_type = var.instance_type
 
-  # Launch EC2 instances in the VPC
-  subnet_id = aws_subnet.public_a.id
+  # Launch EC2 instances in the both subnets
+  subnet_id = [
+    aws_subnet.public_a.id,
+    aws_subnet.public_b.id
+  ][count.index]
 
   # Attach security group
   vpc_security_group_ids = [

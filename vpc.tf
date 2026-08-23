@@ -53,7 +53,7 @@ resource "aws_subnet" "public_b" {
 # Provides internet connectivity for the VPC
 # ---------------------------------------------------------
 
-resource "aws_internet_gateway" "main" {
+resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
@@ -73,7 +73,7 @@ resource "aws_route_table" "public" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.main.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = {
