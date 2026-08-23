@@ -11,10 +11,19 @@ output "instance_private_ips" {
   value       = aws_instance.web[*].private_ip
 }
 
+output "instance_availability_zones" {
+  description = "EC2 Availability Zones"
+  value       = aws_instance.web[*].availability_zone
+}
 
 output "instance_public_ips" {
   description = "Public IP addresses of all EC2 instances"
   value       = aws_instance.web[*].public_ip
+}
+
+output "instance_subnet_ids" {
+  description = "EC2 subnet IDs"
+  value       = aws_instance.web[*].subnet_id
 }
 
 output "instance_names" {
@@ -72,11 +81,42 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
+# =========================================================
+# PUBLIC SUBNET OUTPUTS
+# =========================================================
 output "public_subnet_ids" {
   description = "Public subnet IDs"
   value = [
     aws_subnet.public_a.id,
     aws_subnet.public_b.id
+  ]
+}
+
+output "public_subnet_availability_zones" {
+  description = "Public subnet Availability Zones"
+  value = [
+    aws_subnet.public_a.availability_zone,
+    aws_subnet.public_b.availability_zone
+  ]
+}
+
+# =========================================================
+# PRIVATE SUBNET OUTPUTS
+# =========================================================
+
+output "private_subnet_ids" {
+  description = "Private subnet IDs used by RDS"
+  value = [
+    aws_subnet.private_a.id,
+    aws_subnet.private_b.id
+  ]
+}
+
+output "private_subnet_availability_zones" {
+  description = "Private subnet Availability Zones"
+  value = [
+    aws_subnet.private_a.availability_zone,
+    aws_subnet.private_b.availability_zone
   ]
 }
 
@@ -129,4 +169,28 @@ output "alb_url" {
 output "target_group_arn" {
   description = "Web target group ARN"
   value       = aws_lb_target_group.web_tg.arn
+}
+
+# =========================================================
+# RDS OUTPUTS
+# =========================================================
+
+output "rds_endpoint" {
+  description = "RDS MySQL endpoint"
+  value       = aws_db_instance.mysql.endpoint
+}
+
+output "rds_address" {
+  description = "RDS MySQL hostname"
+  value       = aws_db_instance.mysql.address
+}
+
+output "rds_port" {
+  description = "RDS MySQL port"
+  value       = aws_db_instance.mysql.port
+}
+
+output "rds_database_name" {
+  description = "RDS database name"
+  value       = aws_db_instance.mysql.db_name
 }

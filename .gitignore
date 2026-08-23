@@ -1,0 +1,2 @@
+# Terraform variables - may contain secrets
+terraform.tfvars
