@@ -20,19 +20,33 @@ resource "aws_vpc" "main" {
 # All EC2 instances will be launched in this subnet
 # ---------------------------------------------------------
 
-resource "aws_subnet" "public" {
+# Public Subnet A
+resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "Terraform-Public-Subnet"
+    Name        = "Terraform-Public-Subnet-A"
     Environment = "prod"
     ManagedBy   = "Terraform"
   }
 }
 
+# Public Subnet B
+resource "aws_subnet" "public_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "${var.aws_region}b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name        = "Terraform-Public-Subnet-B"
+    Environment = "prod"
+    ManagedBy   = "Terraform"
+  }
+}
 
 # ---------------------------------------------------------
 # Internet Gateway
@@ -74,7 +88,12 @@ resource "aws_route_table" "public" {
 # Route Table Association
 # ---------------------------------------------------------
 
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
+resource "aws_route_table_association" "public_a" {
+  subnet_id      = aws_subnet.public_a.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public_b" {
+  subnet_id      = aws_subnet.public_b.id
   route_table_id = aws_route_table.public.id
 }

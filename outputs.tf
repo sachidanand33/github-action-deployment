@@ -68,8 +68,16 @@ output "s3_file_locations" {
 # ---------------------------------------------------------
 
 output "vpc_id" {
-  description = "ID of the Terraform VPC"
+  description = "VPC ID"
   value       = aws_vpc.main.id
+}
+
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value = [
+    aws_subnet.public_a.id,
+    aws_subnet.public_b.id
+  ]
 }
 
 output "vpc_cidr" {
@@ -100,4 +108,28 @@ output "public_subnet_cidr" {
 output "security_group_id" {
   description = "Security Group ID"
   value       = aws_security_group.web_sg.id
+}
+
+# ---------------------------------------------------------
+# ALB Outputs
+# ---------------------------------------------------------
+
+output "alb_id" {
+  description = "Application Load Balancer ID"
+  value       = aws_lb.web_alb.id
+}
+
+output "alb_dns_name" {
+  description = "Application Load Balancer DNS name"
+  value       = aws_lb.web_alb.dns_name
+}
+
+output "alb_url" {
+  description = "Application Load Balancer URL"
+  value       = "http://${aws_lb.web_alb.dns_name}"
+}
+
+output "target_group_arn" {
+  description = "Web target group ARN"
+  value       = aws_lb_target_group.web_tg.arn
 }
