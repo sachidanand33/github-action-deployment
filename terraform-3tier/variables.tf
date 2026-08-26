@@ -37,7 +37,7 @@ variable "private_subnet_b_cidr" {
 variable "ec2_instance_count" {
   description = "Number of EC2 instances"
   type        = number
-  default     = 3
+  default     = 4
 }
 
 variable "instance_type" {
