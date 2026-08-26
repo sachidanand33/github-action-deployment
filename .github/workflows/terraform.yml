@@ -26,6 +26,10 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./terraform-3tier
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
