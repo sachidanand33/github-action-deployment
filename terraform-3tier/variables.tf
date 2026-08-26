@@ -41,7 +41,7 @@ variable "ec2_instance_count" {
 }
 
 variable "instance_type" {
-  description = "EC2 instance type"
+  description = "EC2 instance types"
   type        = string
   default     = "t3.micro"
 }
